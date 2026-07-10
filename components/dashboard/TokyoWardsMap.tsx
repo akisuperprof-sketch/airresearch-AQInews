@@ -73,22 +73,13 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  if (!geoData) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-slate-50/50 rounded-xl border border-slate-200 h-full min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-cyan-600 mb-2" />
-        <p className="text-sm text-slate-500">地図データを読み込み中...</p>
-      </div>
-    );
-  }
-
   const projection = useMemo(() => {
     if (!geoData || dimensions.width === 0 || dimensions.height === 0) return null;
     return geoMercator().fitExtent(
       [[20, 20], [dimensions.width - 20, dimensions.height - 20]],
       geoData
     );
-  }, [geoData, dimensions]);
+  }, [geoData, dimensions.width, dimensions.height]);
 
   const pathGenerator = useMemo(() => {
     if (!projection) return null;
@@ -96,6 +87,15 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
   }, [projection]);
 
   const currentAreaId = searchParams.get("area");
+
+  if (!geoData || !projection || !pathGenerator) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center bg-slate-50/50 rounded-xl border border-slate-200 h-full min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-600 mb-2" />
+        <p className="text-sm text-slate-500">地図データを読み込み中...</p>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -111,7 +111,7 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
         <p className="text-[10px] text-slate-500 mt-1">区をクリックしてエリアを選択</p>
       </div>
 
-      {dimensions.width > 0 && projection && pathGenerator && (
+      {dimensions.width > 0 && (
         <svg 
           width={dimensions.width} 
           height={dimensions.height} 
