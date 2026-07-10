@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { geoMercator, geoPath } from "d3-geo";
 import { AirMeasurement } from "@/lib/air/mockData";
+import { getAirTypeColor } from "@/lib/air/score";
 import { Loader2 } from "lucide-react";
 
 interface TokyoWardsMapProps {
@@ -47,17 +48,6 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
     measurements.forEach(m => map.set(m.name, m));
     return map;
   }, [measurements]);
-
-  const getColor = (airType: string) => {
-    switch (airType) {
-      case "すっきり空気": return { fill: "rgba(14, 165, 233, 0.7)", stroke: "rgb(14, 165, 233)", hover: "rgba(14, 165, 233, 0.9)" }; 
-      case "おだやか空気": return { fill: "rgba(34, 197, 94, 0.7)", stroke: "rgb(34, 197, 94)", hover: "rgba(34, 197, 94, 0.9)" };
-      case "ひかえめ空気": return { fill: "rgba(249, 115, 22, 0.7)", stroke: "rgb(249, 115, 22)", hover: "rgba(249, 115, 22, 0.9)" };
-      case "もやっと空気": return { fill: "rgba(234, 179, 8, 0.7)", stroke: "rgb(234, 179, 8)", hover: "rgba(234, 179, 8, 0.9)" };
-      case "こもり空気": return { fill: "rgba(239, 68, 68, 0.7)", stroke: "rgb(239, 68, 68)", hover: "rgba(239, 68, 68, 0.9)" };
-      default: return { fill: "rgba(148, 163, 184, 0.4)", stroke: "rgb(148, 163, 184)", hover: "rgba(148, 163, 184, 0.6)" };
-    }
-  };
 
   const handleMouseMove = (e: React.MouseEvent, measurement?: AirMeasurement) => {
     if (measurement) {
@@ -122,20 +112,20 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
             {geoData.features.map((feature: any, i: number) => {
               const wardName = feature.properties.ward_ja || "不明";
               const measurement = dataMap.get(wardName);
-              // Step A Debug: Force color
-              const fillColor = "#dbeafe";
-              const strokeColor = "#ffffff";
+              const airType = measurement?.airType || "確認中";
+              const colors = getAirTypeColor(airType);
               
               const isHovered = hoveredWard?.name === wardName;
+              const isSelected = currentAreaId === measurement?.id;
 
               return (
                 <path
                   key={`ward-${i}`}
                   d={pathGenerator(feature) || ""}
-                  fill={isHovered ? "#93c5fd" : fillColor}
-                  stroke={strokeColor}
-                  strokeWidth="1.5"
-                  className="transition-all duration-200 cursor-pointer hover:opacity-80"
+                  fill={isHovered || isSelected ? colors.hover : colors.fill}
+                  stroke={isSelected ? "#ffffff" : colors.stroke}
+                  strokeWidth={isSelected ? 2.5 : 1}
+                  className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={(e) => {
                     if (measurement) setHoveredWard(measurement);
                   }}
@@ -164,6 +154,25 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
           <div className="flex justify-between items-start mb-2">
             <span className="font-bold text-slate-800 text-base">{hoveredWard.name}</span>
             <span className="font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">{hoveredWard.score ?? "-"}</span>
+          </div>
+          <div className="mb-2">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold text-white shadow-sm" style={{ backgroundColor: getAirTypeColor(hoveredWard.airType).stroke }}>
+              {hoveredWard.airType}
+            </span>
+          </div>
+          <div className="space-y-1">
+            <div className="flex justify-between text-xs">
+              <span className="text-slate-500">PM2.5</span>
+              <span className="font-medium">{hoveredWard.pm25 ?? "-"} <span className="text-[10px] text-slate-400">μg</span></span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-slate-500">O3 (光化学Ox)</span>
+              <span className="font-medium">{hoveredWard.ox ?? "-"} <span className="text-[10px] text-slate-400">ppm</span></span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-slate-500">コメント</span>
+              <span className="font-medium text-slate-700 truncate max-w-[120px]" title={hoveredWard.comment}>{hoveredWard.comment}</span>
+            </div>
           </div>
         </div>
       )}

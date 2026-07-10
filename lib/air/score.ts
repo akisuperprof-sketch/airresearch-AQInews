@@ -20,6 +20,17 @@ export interface AirQualityLevel {
   subType: AirSubType;
 }
 
+export function getAirTypeColor(airType: AirType | string) {
+  switch (airType) {
+    case "すっきり空気": return { fill: "rgba(14, 165, 233, 0.7)", stroke: "rgb(14, 165, 233)", hover: "rgba(14, 165, 233, 0.9)" }; 
+    case "おだやか空気": return { fill: "rgba(34, 197, 94, 0.7)", stroke: "rgb(34, 197, 94)", hover: "rgba(34, 197, 94, 0.9)" };
+    case "ひかえめ空気": return { fill: "rgba(249, 115, 22, 0.7)", stroke: "rgb(249, 115, 22)", hover: "rgba(249, 115, 22, 0.9)" };
+    case "もやっと空気": return { fill: "rgba(234, 179, 8, 0.7)", stroke: "rgb(234, 179, 8)", hover: "rgba(234, 179, 8, 0.9)" };
+    case "こもり空気": return { fill: "rgba(239, 68, 68, 0.7)", stroke: "rgb(239, 68, 68)", hover: "rgba(239, 68, 68, 0.9)" };
+    default: return { fill: "rgba(148, 163, 184, 0.4)", stroke: "rgb(148, 163, 184)", hover: "rgba(148, 163, 184, 0.6)" };
+  }
+}
+
 export function getAirQualityLevel(score: number | null): AirQualityLevel {
   if (score === null || isNaN(score)) {
     return { level: 0, airType: "確認中", subType: "データ確認中" };
