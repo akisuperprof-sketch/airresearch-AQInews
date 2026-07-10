@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell } from "lucide-react";
+import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
           <NavItem href="/dashboard" icon={Activity} label="ダッシュボード" active />
+          <NavItem href="/intelligence" icon={Sparkles} label="Intelligence" />
           <NavItem href="/dashboard#tokyo-wards" icon={Map} label="東京23区" />
           <NavItem href="/dashboard#alerts" icon={Bell} label="アラート" />
           <div className="pt-4 pb-2">

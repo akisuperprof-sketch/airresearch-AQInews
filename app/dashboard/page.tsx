@@ -10,16 +10,20 @@ import { SnapshotComposer } from "@/components/snapshot/SnapshotComposer";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { ForecastTimeline } from "@/components/dashboard/ForecastTimeline";
 import { AirTypeGuidePanel } from "@/components/dashboard/AirTypeGuidePanel";
+import { AirIntelligenceBrief } from "@/components/intelligence/AirIntelligenceBrief";
 import { getSummaryData, getTokyoData } from "@/lib/air/service";
 import { getForecastData } from "@/lib/air/forecastService";
+import { getLatestIntelligence } from "@/lib/intelligence/service";
 
 export default async function DashboardPage({ searchParams }: { searchParams: { area?: string } }) {
   const currentAreaId = searchParams?.area || "tokyo";
 
-  const [summaryRes, tokyoRes, forecastRes] = await Promise.all([
+  const [summaryRes, tokyoRes, forecastRes, japanItems, globalItems] = await Promise.all([
     getSummaryData(),
     getTokyoData(),
-    getForecastData(currentAreaId)
+    getForecastData(currentAreaId),
+    getLatestIntelligence("japan", 1),
+    getLatestIntelligence("global", 1)
   ]);
 
   const majorCities = summaryRes.data;
@@ -59,6 +63,15 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
     { id: "3", time: "09:00", type: "fetch_success", target: "3大都市", message: "データを取得", result: "success" as const },
   ];
 
+  // AIR Intelligence 取得結果（DBが空の場合はMVPダミーデータ）
+  const now = new Date().toISOString();
+  const displayJapanItems = japanItems.length > 0 ? japanItems : [
+    { id: "mock-j1", region: "japan", title: "環境省: 微小粒子状物質(PM2.5)に関する注意喚起", source_name: "環境省 報道発表", article_url: "https://www.env.go.jp/press/", published_at: now, data_quality: "demo" }
+  ];
+  const displayGlobalItems = globalItems.length > 0 ? globalItems : [
+    { id: "mock-g1", region: "global", title: "WHO: Global Air Quality Guidelines Updated", source_name: "WHO Newsroom", article_url: "https://www.who.int/news", published_at: now, data_quality: "demo" }
+  ];
+
   return (
     <DashboardShell>
       <div className="flex flex-col gap-4 h-[calc(100vh-3rem)]">
@@ -84,6 +97,11 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             {/* 今日の空気の流れ (タイムライン) */}
             <div className="shrink-0">
               <ForecastTimeline forecasts={forecasts} />
+            </div>
+            
+            {/* AIR Intelligence Brief (Additive) */}
+            <div className="shrink-0 mt-2">
+              <AirIntelligenceBrief japanItems={displayJapanItems} globalItems={displayGlobalItems} />
             </div>
             
             {/* 下部パネル：23区とガイド */}
