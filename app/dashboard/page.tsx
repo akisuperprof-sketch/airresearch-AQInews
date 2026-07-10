@@ -1,12 +1,11 @@
 import { Suspense } from "react";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { AirHeroSummary } from "@/components/dashboard/AirHeroSummary";
-import { MajorCityCard } from "@/components/dashboard/MajorCityCard";
-import { TokyoWardPanel } from "@/components/dashboard/TokyoWardPanel";
+import { TokyoWardsMap } from "@/components/dashboard/TokyoWardsMap";
 import { AlertPanel, AlertItem } from "@/components/dashboard/AlertPanel";
 import { KpiPanel } from "@/components/dashboard/KpiPanel";
 import { FetchLogPanel } from "@/components/dashboard/FetchLogPanel";
-import { SnapshotComposer } from "@/components/snapshot/SnapshotComposer";
+import { SnapshotDialog } from "@/components/snapshot/SnapshotDialog";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { ForecastTimeline } from "@/components/dashboard/ForecastTimeline";
 import { AirTypeGuidePanel } from "@/components/dashboard/AirTypeGuidePanel";
@@ -66,10 +65,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
   // AIR Intelligence 取得結果（DBが空の場合はMVPダミーデータ）
   const now = new Date().toISOString();
   const displayJapanItems = japanItems.length > 0 ? japanItems : [
-    { id: "mock-j1", region: "japan", title: "環境省: 微小粒子状物質(PM2.5)に関する注意喚起", source_name: "環境省 報道発表", article_url: "https://www.env.go.jp/press/", published_at: now, data_quality: "demo" }
+    { id: "mock-j1", region: "japan" as const, title: "環境省: 微小粒子状物質(PM2.5)に関する注意喚起", source_name: "環境省 報道発表", article_url: "https://www.env.go.jp/press/", published_at: now, data_quality: "demo" as const }
   ];
   const displayGlobalItems = globalItems.length > 0 ? globalItems : [
-    { id: "mock-g1", region: "global", title: "WHO: Global Air Quality Guidelines Updated", source_name: "WHO Newsroom", article_url: "https://www.who.int/news", published_at: now, data_quality: "demo" }
+    { id: "mock-g1", region: "global" as const, title: "WHO: Global Air Quality Guidelines Updated", source_name: "WHO Newsroom", article_url: "https://www.who.int/news", published_at: now, data_quality: "demo" as const }
   ];
 
   return (
@@ -80,47 +79,43 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
             <LocationSelector currentArea={currentAreaId} />
           </Suspense>
+          <SnapshotDialog measurement={primaryCity} forecasts={forecasts} />
         </div>
 
-        {/* メイングリッド */}
-        <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-4 min-h-0">
+        {/* メイングリッド (3カラム構成: 3:6:3) */}
+        <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-4 min-h-0 overflow-hidden">
           
-          {/* 左側：メインコンテンツ (8/12) */}
-          <div className="xl:col-span-8 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
-            {/* いまの空気 と このあとの空気 (サマリー) */}
+          {/* 左側カラム (3/12): サマリー系 */}
+          <div className="xl:col-span-3 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
             <AirHeroSummary 
               primaryMeasurement={primaryCity} 
               nextForecast={nextForecast}
               researchNote={researchNote}
             />
-            
-            {/* 今日の空気の流れ (タイムライン) */}
             <div className="shrink-0">
               <ForecastTimeline forecasts={forecasts} />
             </div>
-            
-            {/* AIR Intelligence Brief (Additive) */}
-            <div className="shrink-0 mt-2">
+            <div className="shrink-0">
               <AirIntelligenceBrief japanItems={displayJapanItems} globalItems={displayGlobalItems} />
             </div>
-            
-            {/* 下部パネル：23区とガイド */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[300px]">
-              <TokyoWardPanel measurements={tokyoWards} />
+            <div className="shrink-0 mt-auto pt-4 hidden xl:block">
               <AirTypeGuidePanel />
             </div>
           </div>
 
-          {/* 右側：サイドコンテンツ (4/12) */}
-          <div className="xl:col-span-4 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
-            <div className="shrink-0">
-              <SnapshotComposer measurement={primaryCity} forecasts={forecasts} />
+          {/* 中央カラム (6/12): 東京23区マップ */}
+          <div className="xl:col-span-6 flex flex-col min-h-0 overflow-hidden">
+            <TokyoWardsMap measurements={tokyoWards} />
+            <div className="xl:hidden mt-4 shrink-0">
+              <AirTypeGuidePanel />
             </div>
-            
+          </div>
+
+          {/* 右側カラム (3/12): アラート・ログ・KPI */}
+          <div className="xl:col-span-3 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
             <AlertPanel alerts={mockAlerts} />
             <FetchLogPanel logs={mockLogs} />
-            
-            <div className="shrink-0">
+            <div className="shrink-0 mt-auto">
               <KpiPanel data={mockKpi} />
             </div>
           </div>

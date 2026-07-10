@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
-import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell, Sparkles } from "lucide-react";
+import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell, Sparkles, RefreshCw, Layers } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { SnapshotDialog } from "@/components/snapshot/SnapshotDialog";
 
 interface DashboardShellProps {
   children: ReactNode;
@@ -64,12 +65,23 @@ export function DashboardShell({ children }: DashboardShellProps) {
             <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">Command Center</h1>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <div className="text-xs text-slate-500 hidden sm:block">
-              最終更新: {new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+          <div className="flex items-center space-x-2">
+            <div className="hidden sm:block">
+              {/* Dummy data, assume primaryCity exists in global context if needed, or pass null if snapshot modal can fetch. Actually SnapshotDialog needs measurement. We'll add it in page.tsx instead, and here just provide a slot or handle it via context.
+                  Wait, SnapshotDialog needs measurement and forecasts. It's better to place SnapshotDialog in page.tsx toolbar where LocationSelector is.
+              */}
             </div>
-            <button className="bg-cyan-50 text-cyan-600 hover:bg-cyan-100 border border-cyan-200 px-3 py-1.5 rounded-md text-sm font-medium transition-colors shadow-sm">
-              今すぐ更新
+            <button className="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-full transition-colors group relative">
+              <RefreshCw className="w-5 h-5 group-hover:animate-spin-slow" />
+              <span className="absolute -bottom-8 right-0 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">最新に更新</span>
+            </button>
+            <button className="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-full transition-colors group relative">
+              <Share2 className="w-5 h-5" />
+              <span className="absolute -bottom-8 right-0 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">SNS投稿</span>
+            </button>
+            <button className="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-full transition-colors group relative">
+              <Settings className="w-5 h-5" />
+              <span className="absolute -bottom-8 right-0 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">設定</span>
             </button>
           </div>
         </header>
