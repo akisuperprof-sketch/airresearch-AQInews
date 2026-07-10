@@ -25,7 +25,7 @@ export function SnapshotDialog({ measurement, forecasts = [] }: SnapshotDialogPr
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden relative flex flex-col max-h-[90vh]">
             <div className="px-4 py-3 border-b flex justify-between items-center bg-slate-50">
               <h2 className="font-bold text-slate-800">SNS投稿画像の生成</h2>

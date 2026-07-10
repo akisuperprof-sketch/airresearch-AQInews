@@ -106,8 +106,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </div>
 
           {/* 中央カラム (6/12): 東京23区マップ */}
-          <div className="xl:col-span-6 flex flex-col min-h-0 overflow-hidden">
-            <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl">Loading Map...</div>}>
+          <div className="xl:col-span-6 flex flex-col min-h-[400px] xl:min-h-0 overflow-hidden">
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
               <TokyoWardsMap measurements={tokyoWards} />
             </Suspense>
             <div className="xl:hidden mt-4 shrink-0">
