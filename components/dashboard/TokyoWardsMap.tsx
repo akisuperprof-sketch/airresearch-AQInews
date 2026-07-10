@@ -142,7 +142,7 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
             <span className="font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">{hoveredWard.score ?? "-"}</span>
           </div>
           <div className="mb-2">
-            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold text-white shadow-sm ${getColor(hoveredWard.airType).text || 'bg-slate-500'}`} style={{ backgroundColor: getColor(hoveredWard.airType).stroke }}>
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold text-white shadow-sm" style={{ backgroundColor: getColor(hoveredWard.airType).stroke }}>
               {hoveredWard.airType}
             </span>
           </div>
@@ -153,11 +153,11 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
             </div>
             <div className="flex justify-between text-xs">
               <span className="text-slate-500">O3 (光化学Ox)</span>
-              <span className="font-medium">{hoveredWard.o3 ?? "-"} <span className="text-[10px] text-slate-400">ppm</span></span>
+              <span className="font-medium">{hoveredWard.ox ?? "-"} <span className="text-[10px] text-slate-400">ppm</span></span>
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-slate-500">主要因</span>
-              <span className="font-medium text-slate-700">{hoveredWard.dominantPollutant ?? "-"}</span>
+              <span className="text-slate-500">コメント</span>
+              <span className="font-medium text-slate-700 truncate max-w-[120px]" title={hoveredWard.comment}>{hoveredWard.comment}</span>
             </div>
           </div>
         </div>

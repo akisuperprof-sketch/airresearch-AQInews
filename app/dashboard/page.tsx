@@ -79,7 +79,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
             <LocationSelector currentArea={currentAreaId} />
           </Suspense>
-          <SnapshotDialog measurement={primaryCity} forecasts={forecasts} />
+          <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
+            <SnapshotDialog measurement={primaryCity} forecasts={forecasts} />
+          </Suspense>
         </div>
 
         {/* メイングリッド (3カラム構成: 3:6:3) */}
@@ -105,7 +107,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
 
           {/* 中央カラム (6/12): 東京23区マップ */}
           <div className="xl:col-span-6 flex flex-col min-h-0 overflow-hidden">
-            <TokyoWardsMap measurements={tokyoWards} />
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl">Loading Map...</div>}>
+              <TokyoWardsMap measurements={tokyoWards} />
+            </Suspense>
             <div className="xl:hidden mt-4 shrink-0">
               <AirTypeGuidePanel />
             </div>
