@@ -106,25 +106,22 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
           width={dimensions.width} 
           height={dimensions.height} 
           viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 bg-white"
         >
           <g>
             {geoData.features.map((feature: any, i: number) => {
               const wardName = feature.properties.ward_ja || "不明";
               const measurement = dataMap.get(wardName);
-              const airType = measurement?.airType || "確認中";
-              const colors = getAirTypeColor(airType);
               
               const isHovered = hoveredWard?.name === wardName;
-              const isSelected = currentAreaId === measurement?.id;
 
               return (
                 <path
                   key={`ward-${i}`}
                   d={pathGenerator(feature) || ""}
-                  fill={isHovered || isSelected ? colors.hover : colors.fill}
-                  stroke={isSelected ? "#ffffff" : colors.stroke}
-                  strokeWidth={isSelected ? 2.5 : 1}
+                  fill={isHovered ? "#93c5fd" : "#dbeafe"}
+                  stroke="#2563eb"
+                  strokeWidth="1.5"
                   className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={(e) => {
                     if (measurement) setHoveredWard(measurement);
