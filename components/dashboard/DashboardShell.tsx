@@ -1,14 +1,17 @@
-import { ReactNode } from "react";
-import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell, Sparkles, RefreshCw, Layers } from "lucide-react";
+"use client";
+
+import { ReactNode, useState } from "react";
+import { Cloud, Settings, Share2, Activity, Map, BarChart2, Bell, Sparkles, RefreshCw, Layers, Menu } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { SnapshotDialog } from "@/components/snapshot/SnapshotDialog";
 
 interface DashboardShellProps {
   children: ReactNode;
 }
 
 export function DashboardShell({ children }: DashboardShellProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen relative font-sans text-slate-900 flex overflow-hidden">
       {/* Aurora Background */}
@@ -16,50 +19,54 @@ export function DashboardShell({ children }: DashboardShellProps) {
       <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-br from-blue-100/40 via-cyan-50/40 to-transparent -z-10 pointer-events-none"></div>
       <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-200/20 blur-3xl -z-10 pointer-events-none"></div>
       
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-30 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Side Navigation */}
-      <aside className="w-64 bg-white/70 backdrop-blur-xl border-r border-slate-200/60 hidden md:flex flex-col z-10">
-        <div className="p-6">
-          <Link href="/dashboard" className="flex items-center space-x-2 text-cyan-600">
-            <Cloud className="w-8 h-8" />
-            <span className="text-xl font-black tracking-tight">AIR Research</span>
+      <aside className={cn(
+        "bg-white/90 backdrop-blur-xl border-r border-slate-200/60 flex flex-col z-40 transition-all duration-300 ease-in-out absolute lg:relative h-full",
+        isSidebarOpen ? "w-64 translate-x-0" : "-translate-x-full lg:translate-x-0 lg:w-20"
+      )}>
+        <div className="p-4 flex items-center justify-center lg:justify-start lg:px-6 shrink-0 h-16">
+          <Link href="/dashboard" className="flex items-center text-cyan-600 gap-2">
+            <Cloud className="w-8 h-8 shrink-0" />
+            <span className={cn("text-xl font-black tracking-tight", isSidebarOpen ? "block" : "hidden lg:hidden")}>AIR</span>
           </Link>
-          <div className="mt-2 text-xs text-slate-400 font-medium tracking-wider">COMMAND CENTER</div>
         </div>
         
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          <NavItem href="/dashboard" icon={Activity} label="ダッシュボード" active />
-          <NavItem href="/intelligence" icon={Sparkles} label="Intelligence" />
-          <NavItem href="/dashboard#tokyo-wards" icon={Map} label="東京23区" />
-          <NavItem href="/dashboard#alerts" icon={Bell} label="アラート" />
-          <div className="pt-4 pb-2">
-            <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto custom-scrollbar mt-4">
+          <NavItem href="/dashboard" icon={Activity} label="ダッシュボード" active expanded={isSidebarOpen} />
+          <NavItem href="/intelligence" icon={Sparkles} label="Intelligence" expanded={isSidebarOpen} />
+          <NavItem href="/dashboard#tokyo-wards" icon={Map} label="東京23区" expanded={isSidebarOpen} />
+          <NavItem href="/dashboard#alerts" icon={Bell} label="アラート" expanded={isSidebarOpen} />
+          <div className="pt-4 pb-2 text-center lg:text-left">
+            <p className={cn("px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider", isSidebarOpen ? "block" : "hidden lg:hidden")}>
               Tools
             </p>
           </div>
-          <NavItem href="/dashboard#air-type-guide" icon={Share2} label="空気タイプ説明" />
-          <NavItem href="#" icon={Settings} label="設定" />
+          <NavItem href="/dashboard#air-type-guide" icon={Share2} label="空気タイプ説明" expanded={isSidebarOpen} />
+          <NavItem href="#" icon={Settings} label="設定" expanded={isSidebarOpen} />
         </nav>
-        
-        <div className="p-4 border-t border-slate-200/60">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold shadow-sm">
-              A
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">Admin User</span>
-              <span className="text-xs text-slate-500">管理者</span>
-            </div>
-          </div>
-        </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 z-10">
+      <main className="flex-1 flex flex-col min-w-0 z-10 w-full">
         {/* Header */}
-        <header className="bg-white/50 backdrop-blur-md border-b border-slate-200/60 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center md:hidden text-cyan-600">
-            <Cloud className="w-6 h-6 mr-2" />
-            <span className="font-bold">AIR Research</span>
+        <header className="bg-white/50 backdrop-blur-md border-b border-slate-200/60 px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-20 h-16 shrink-0">
+          <div className="flex items-center text-cyan-600 gap-3">
+            <button 
+              className="lg:hidden p-1.5 -ml-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-500"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <Cloud className="w-6 h-6 md:hidden" />
+            <span className="font-bold hidden sm:block md:hidden">AIR</span>
           </div>
           <div className="hidden md:block">
             <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">Command Center</h1>
@@ -96,19 +103,21 @@ export function DashboardShell({ children }: DashboardShellProps) {
   );
 }
 
-function NavItem({ href, icon: Icon, label, active }: { href: string; icon: any; label: string; active?: boolean }) {
+function NavItem({ href, icon: Icon, label, active, expanded }: { href: string; icon: any; label: string; active?: boolean; expanded?: boolean }) {
   return (
     <Link
       href={href}
+      title={label}
       className={cn(
-        "flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors",
+        "flex items-center py-2.5 font-medium rounded-md transition-colors",
+        expanded ? "px-3" : "justify-center px-0 lg:justify-center",
         active 
-          ? "bg-cyan-50 text-cyan-700 font-semibold shadow-sm" 
+          ? "bg-cyan-50 text-cyan-700 shadow-sm" 
           : "text-slate-600 hover:bg-white/60 hover:text-slate-900"
       )}
     >
-      <Icon className={cn("w-5 h-5 mr-3", active ? "text-cyan-600" : "text-slate-400")} />
-      {label}
+      <Icon className={cn("w-5 h-5 shrink-0", active ? "text-cyan-600" : "text-slate-400", expanded ? "mr-3" : "")} />
+      <span className={cn("text-sm whitespace-nowrap overflow-hidden", expanded ? "block" : "hidden lg:hidden")}>{label}</span>
     </Link>
   );
 }

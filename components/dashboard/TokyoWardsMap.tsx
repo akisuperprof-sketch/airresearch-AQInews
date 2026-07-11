@@ -66,7 +66,7 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
   const projection = useMemo(() => {
     if (!geoData || dimensions.width === 0 || dimensions.height === 0) return null;
     return geoMercator().fitExtent(
-      [[20, 20], [dimensions.width - 20, dimensions.height - 20]],
+      [[40, 40], [dimensions.width - 40, dimensions.height - 40]],
       geoData
     );
   }, [geoData, dimensions.width, dimensions.height]);

@@ -14,27 +14,27 @@ interface KpiPanelProps {
 
 export function KpiPanel({ data }: KpiPanelProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-3">
       <KpiCard 
-        label="データ鮮度" 
-        value={`${data.freshnessMin}分前`} 
+        label="鮮度" 
+        value={`${data.freshnessMin}分`} 
         icon={Clock} 
         trend={data.freshnessMin < 30 ? "good" : "bad"} 
       />
       <KpiCard 
-        label="取得成功率" 
+        label="成功率" 
         value={`${data.successRate}%`} 
         icon={Activity} 
         trend={data.successRate > 95 ? "good" : "bad"} 
       />
       <KpiCard 
-        label="注意エリア" 
-        value={`${data.cautionAreasCount}箇所`} 
+        label="注意" 
+        value={`${data.cautionAreasCount}区`} 
         icon={AlertTriangle} 
         trend={data.cautionAreasCount === 0 ? "good" : "neutral"} 
       />
       <KpiCard 
-        label="SNS投稿候補" 
+        label="投稿候補" 
         value={`${data.snapshotReadyCount}件`} 
         icon={ImageIcon} 
         trend="neutral" 

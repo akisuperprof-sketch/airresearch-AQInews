@@ -10,6 +10,7 @@ import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { ForecastTimeline } from "@/components/dashboard/ForecastTimeline";
 import { AirTypeGuidePanel } from "@/components/dashboard/AirTypeGuidePanel";
 import { AirIntelligenceBrief } from "@/components/intelligence/AirIntelligenceBrief";
+import { RightUtilityPanel } from "@/components/dashboard/RightUtilityPanel";
 import { getSummaryData, getTokyoData } from "@/lib/air/service";
 import { getForecastData } from "@/lib/air/forecastService";
 import { getLatestIntelligence } from "@/lib/intelligence/service";
@@ -73,7 +74,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-4 h-[calc(100vh-3rem)]">
+      <div className="flex flex-col gap-4 min-h-[calc(100vh-3rem)] xl:h-[calc(100vh-3rem)]">
         {/* ツールバー（エリア選択など） */}
         <div className="shrink-0 flex justify-between items-center bg-white/40 backdrop-blur-xl border border-white/60 p-3 rounded-2xl shadow-sm">
           <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
@@ -84,11 +85,11 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </Suspense>
         </div>
 
-        {/* メイングリッド (3カラム構成: 3:6:3) */}
-        <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-4 min-h-0 overflow-hidden">
+        {/* メイングリッド (2カラム構成: 4:8) */}
+        <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-4 min-h-0 xl:overflow-hidden pb-6 xl:pb-0">
           
-          {/* 左側カラム (3/12): サマリー系 */}
-          <div className="xl:col-span-3 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
+          {/* 左側カラム (4/12): サマリー系 */}
+          <div className="xl:col-span-4 flex flex-col gap-4 xl:overflow-y-auto pr-1 custom-scrollbar">
             <AirHeroSummary 
               primaryMeasurement={primaryCity} 
               nextForecast={nextForecast}
@@ -97,7 +98,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             <div className="shrink-0">
               <ForecastTimeline forecasts={forecasts} />
             </div>
-            <div className="shrink-0">
+            <div className="shrink-0 min-h-0 flex-1">
               <AirIntelligenceBrief japanItems={displayJapanItems} globalItems={displayGlobalItems} />
             </div>
             <div className="shrink-0 mt-auto pt-4 hidden xl:block">
@@ -105,8 +106,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             </div>
           </div>
 
-          {/* 中央カラム (6/12): 東京23区マップ */}
-          <div className="xl:col-span-6 flex flex-col min-h-[400px] xl:min-h-0 overflow-hidden">
+          {/* 中央カラム (8/12): 東京23区マップ */}
+          <div className="xl:col-span-8 flex flex-col min-h-[400px] xl:min-h-0 xl:overflow-hidden relative">
             <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
               <TokyoWardsMap measurements={tokyoWards} />
             </Suspense>
@@ -115,16 +116,16 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             </div>
           </div>
 
-          {/* 右側カラム (3/12): アラート・ログ・KPI */}
-          <div className="xl:col-span-3 flex flex-col gap-4 overflow-y-auto pr-1 custom-scrollbar">
-            <AlertPanel alerts={mockAlerts} />
-            <FetchLogPanel logs={mockLogs} />
-            <div className="shrink-0 mt-auto">
-              <KpiPanel data={mockKpi} />
-            </div>
-          </div>
-
         </div>
+
+        {/* 右スライドパネル (Utility) */}
+        <RightUtilityPanel>
+          <AlertPanel alerts={mockAlerts} />
+          <div className="shrink-0">
+            <KpiPanel data={mockKpi} />
+          </div>
+          <FetchLogPanel logs={mockLogs} />
+        </RightUtilityPanel>
       </div>
     </DashboardShell>
   );

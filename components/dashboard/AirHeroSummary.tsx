@@ -20,18 +20,18 @@ export function AirHeroSummary({ primaryMeasurement: m, nextForecast, researchNo
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${bgGradient} p-8 text-white shadow-lg`}>
+    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${bgGradient} p-5 md:p-6 text-white shadow-sm shrink-0`}>
       {/* Aurora Glassmorphism Overlay */}
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"></div>
       
-      <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
-        <div className="flex-1 space-y-4">
+      <div className="relative z-10 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div className="flex-1 space-y-3 min-w-0">
           <div>
-            <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold mb-3 border border-white/30">
+            <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold mb-2 border border-white/30">
               {m.name} の空気
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight drop-shadow-sm flex items-center gap-3">
-              {m.airType}空気 <span className="text-3xl">{statusIcon}</span>
+            <h1 className="text-3xl xl:text-4xl font-black tracking-tight drop-shadow-sm flex items-center gap-2 flex-wrap">
+              {m.airType} <span className="text-2xl">{statusIcon}</span>
             </h1>
             <p className="mt-2 text-lg text-white/90 font-medium">
               {m.comment}
