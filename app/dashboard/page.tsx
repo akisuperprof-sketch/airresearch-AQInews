@@ -85,19 +85,21 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </Suspense>
         </div>
 
-        {/* メイングリッド (2カラム構成: 左40% / 右60%) */}
+        {/* Heroセクション (全幅) */}
+        <div className="w-full">
+          <AirHeroSummary 
+            primaryMeasurement={primaryCity} 
+            nextForecast={nextForecast}
+            researchNote={researchNote}
+          />
+        </div>
+
+        {/* 下段グリッド (2カラム構成: 左 Forecast/Intel / 右 Map) */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 pb-6">
           
-          {/* 左側カラム (5/12): サマリー系 */}
+          {/* 左側カラム (5/12): Forecast & Intelligence */}
           <div className="xl:col-span-5 flex flex-col gap-6 min-w-0">
-            <AirHeroSummary 
-              primaryMeasurement={primaryCity} 
-              nextForecast={nextForecast}
-              researchNote={researchNote}
-            />
-            <div className="shrink-0">
-              <ForecastTimeline forecasts={forecasts} />
-            </div>
+            <ForecastTimeline forecasts={forecasts} />
             <div className="shrink-0 min-h-0 flex-1">
               <AirIntelligenceBrief japanItems={displayJapanItems} globalItems={displayGlobalItems} />
             </div>
@@ -106,7 +108,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             </div>
           </div>
 
-          {/* 中央カラム (7/12): 東京23区マップ */}
+          {/* 右側カラム (7/12): 東京23区マップ */}
           <div className="xl:col-span-7 flex flex-col relative min-w-0">
             <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
               <TokyoWardsMap measurements={tokyoWards} />
