@@ -33,9 +33,9 @@ export function AirIntelligenceBrief({ japanItems, globalItems }: AirIntelligenc
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-4 min-w-0">
         {featuredJapan ? (
-          <AirIntelligenceCard item={featuredJapan} className="bg-white/80" />
+          <AirIntelligenceCard item={featuredJapan} className="bg-white/80 [&_h4]:line-clamp-2" />
         ) : (
           <div className="p-4 rounded-xl border border-dashed border-slate-300 text-slate-400 text-sm text-center">
             Japan news not available
@@ -43,7 +43,7 @@ export function AirIntelligenceBrief({ japanItems, globalItems }: AirIntelligenc
         )}
         
         {featuredGlobal ? (
-          <AirIntelligenceCard item={featuredGlobal} className="bg-white/80" />
+          <AirIntelligenceCard item={featuredGlobal} className="bg-white/80 [&_h4]:line-clamp-2" />
         ) : (
           <div className="p-4 rounded-xl border border-dashed border-slate-300 text-slate-400 text-sm text-center">
             Global news not available

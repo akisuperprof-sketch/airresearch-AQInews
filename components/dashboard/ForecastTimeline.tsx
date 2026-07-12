@@ -24,7 +24,7 @@ export function ForecastTimeline({ forecasts }: { forecasts: AirForecast[] }) {
   };
 
   return (
-    <div className="bg-white/40 backdrop-blur-xl rounded-2xl p-6 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
+    <div className="bg-white/40 backdrop-blur-xl rounded-2xl p-6 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] max-w-full min-w-0 overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-slate-800 flex items-center">
           <span className="bg-gradient-to-r from-blue-500 to-cyan-400 w-1.5 h-5 rounded-full mr-2"></span>

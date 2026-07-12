@@ -66,7 +66,7 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
   const projection = useMemo(() => {
     if (!geoData || dimensions.width === 0 || dimensions.height === 0) return null;
     return geoMercator().fitExtent(
-      [[40, 40], [dimensions.width - 40, dimensions.height - 40]],
+      [[40, 80], [dimensions.width - 40, dimensions.height - 40]],
       geoData
     );
   }, [geoData, dimensions.width, dimensions.height]);
@@ -89,7 +89,7 @@ export function TokyoWardsMap({ measurements }: TokyoWardsMapProps) {
 
   return (
     <div 
-      className="flex-1 bg-white/40 rounded-xl border border-white/60 shadow-sm relative overflow-hidden h-full flex flex-col" 
+      className="flex-1 bg-white/40 rounded-xl border border-white/60 shadow-sm relative overflow-hidden flex flex-col min-h-[360px] md:min-h-[480px] xl:min-h-[560px]" 
       ref={containerRef}
       onMouseLeave={() => setHoveredWard(null)}
     >

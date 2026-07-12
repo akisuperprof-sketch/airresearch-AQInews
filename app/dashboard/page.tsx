@@ -74,7 +74,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-4 min-h-[calc(100vh-3rem)] xl:h-[calc(100vh-3rem)]">
+      <div className="flex flex-col gap-4">
         {/* ツールバー（エリア選択など） */}
         <div className="shrink-0 flex justify-between items-center bg-white/40 backdrop-blur-xl border border-white/60 p-3 rounded-2xl shadow-sm">
           <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
@@ -85,11 +85,11 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </Suspense>
         </div>
 
-        {/* メイングリッド (2カラム構成: 4:8) */}
-        <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-4 min-h-0 xl:overflow-hidden pb-6 xl:pb-0">
+        {/* メイングリッド (2カラム構成: 左40% / 右60%) */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 pb-6">
           
-          {/* 左側カラム (4/12): サマリー系 */}
-          <div className="xl:col-span-4 flex flex-col gap-4 xl:overflow-y-auto pr-1 custom-scrollbar">
+          {/* 左側カラム (5/12): サマリー系 */}
+          <div className="xl:col-span-5 flex flex-col gap-6 min-w-0">
             <AirHeroSummary 
               primaryMeasurement={primaryCity} 
               nextForecast={nextForecast}
@@ -106,8 +106,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             </div>
           </div>
 
-          {/* 中央カラム (8/12): 東京23区マップ */}
-          <div className="xl:col-span-8 flex flex-col min-h-[400px] xl:min-h-0 xl:overflow-hidden relative">
+          {/* 中央カラム (7/12): 東京23区マップ */}
+          <div className="xl:col-span-7 flex flex-col relative min-w-0">
             <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
               <TokyoWardsMap measurements={tokyoWards} />
             </Suspense>
