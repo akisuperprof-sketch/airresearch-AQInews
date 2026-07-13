@@ -69,7 +69,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
             <span className="font-bold hidden sm:block md:hidden">AIR</span>
           </div>
           <div className="hidden md:block">
-            <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">Command Center</h1>
+            <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">AIR Research NEWS</h1>
           </div>
           
           <div className="flex items-center space-x-2">

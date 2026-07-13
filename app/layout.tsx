@@ -10,7 +10,7 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   title: "AIR Research",
-  description: "AIR Research Command Center",
+  description: "AIR Research NEWS",
 };
 
 export default function RootLayout({
