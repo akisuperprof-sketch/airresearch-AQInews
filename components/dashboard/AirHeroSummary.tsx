@@ -51,24 +51,38 @@ export function AirHeroSummary({ primaryMeasurement: m, nextForecast, researchNo
 
         <div className="shrink-0 flex flex-row flex-wrap gap-3 w-full xl:w-auto">
           {/* 現在の観測値 */}
-          <div className="flex-1 min-w-[140px] bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl p-5 text-center">
+          <div className="group relative flex-1 min-w-[140px] bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl p-5 text-center cursor-help">
             <div className="text-xs font-bold text-white/80 uppercase mb-1">いまの空気</div>
             <div className="text-2xl font-black">{m.score}<span className="text-sm font-normal opacity-70"> /100</span></div>
             <div className="mt-2 pt-2 border-t border-white/20 text-xs font-medium whitespace-normal break-words">
               PM2.5: {m.pm25}
             </div>
             <div className="mt-1 text-[9px] opacity-60">観測値 ({m.sourceLabel})</div>
+
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-slate-900 text-white text-[10px] p-2 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-lg pointer-events-none z-50 text-left font-normal leading-relaxed">
+              <strong className="text-cyan-300">独自スコア（100点満点）</strong><br/>
+              PM2.5等の観測データを元にした直感的なスコアです。AQIとは異なり、<strong>数値が高いほど良好</strong>な状態を示します。
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+            </div>
           </div>
           
           {/* このあとの予測値 */}
           {nextForecast && (
-            <div className="flex-1 min-w-[140px] bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-5 text-center">
+            <div className="group relative flex-1 min-w-[140px] bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-5 text-center cursor-help">
               <div className="text-xs font-bold text-white/80 uppercase mb-1">このあとの空気</div>
               <div className="text-xl font-black mt-2">{nextForecast.airType}</div>
               <div className="mt-3 pt-2 border-t border-white/20 text-xs font-medium whitespace-normal break-words">
                 AQI: {nextForecast.europeanAqi}
               </div>
               <div className="mt-1 text-[9px] opacity-60 whitespace-normal break-words">予測 ({nextForecast.source})</div>
+
+              {/* Tooltip */}
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-slate-900 text-white text-[10px] p-2 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-lg pointer-events-none z-50 text-left font-normal leading-relaxed">
+                <strong className="text-cyan-300">AQI (空気質指数)</strong><br/>
+                国際的な空気の汚れの指標です。独自スコアとは逆で、<strong>数値が小さいほどきれい</strong>な状態を示します（0〜20が良好）。
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+              </div>
             </div>
           )}
         </div>

@@ -6,17 +6,15 @@ export function ForecastTimeline({ forecasts }: { forecasts: AirForecast[] }) {
   // 空気タイプに基づく色分け設定 (AuroraUI思想に合わせた淡いトーン)
   const getAirColorClass = (type: string) => {
     switch (type) {
-      case "すっきり":
+      case "すっきり空気":
         return "bg-cyan-50 text-cyan-700 border-cyan-100";
-      case "おだやか":
+      case "おだやか空気":
         return "bg-blue-50 text-blue-700 border-blue-100";
-      case "ひかえめ":
-        return "bg-emerald-50 text-emerald-700 border-emerald-100";
-      case "もやっと":
+      case "もやっと空気":
         return "bg-amber-50 text-amber-700 border-amber-100";
-      case "どんより":
+      case "ひかえめ空気":
         return "bg-orange-50 text-orange-700 border-orange-100";
-      case "きけん":
+      case "こもり空気":
         return "bg-rose-50 text-rose-700 border-rose-100";
       default:
         return "bg-slate-50 text-slate-700 border-slate-100";

@@ -35,8 +35,16 @@ export async function getForecastData(locationSlug: string): Promise<{ data: Air
     const mockData: AirForecast[] = [];
     for (let i = 0; i < 12; i++) {
       const d = new Date(now.getTime() + i * 60 * 60 * 1000);
-      // Create a slight curve for fake data
-      const eaqi = 30 + Math.sin(i / 2) * 20; 
+      let eaqi = 30 + Math.sin(i / 2) * 20; 
+
+      if (locationSlug === "osaka") {
+        // Starts around 60 (もやっと), worsens to 90 (どんより)
+        eaqi = 60 + i * 2.5; 
+      } else if (locationSlug === "nagoya") {
+        // Starts around 75 (もやっと), worsens to 105 (きけん)
+        eaqi = 75 + i * 2.5; 
+      }
+
       mockData.push({
         time: d.toISOString(),
         europeanAqi: Math.round(eaqi),

@@ -15,7 +15,8 @@ import { getSummaryData, getTokyoData } from "@/lib/air/service";
 import { getForecastData } from "@/lib/air/forecastService";
 import { getLatestIntelligence } from "@/lib/intelligence/service";
 
-export default async function DashboardPage({ searchParams }: { searchParams: { area?: string } }) {
+export default async function DashboardPage(props: { searchParams: Promise<{ area?: string }> }) {
+  const searchParams = await props.searchParams;
   const currentAreaId = searchParams?.area || "tokyo";
 
   const [summaryRes, tokyoRes, forecastRes, japanItems, globalItems] = await Promise.all([
@@ -48,11 +49,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
     }
   }
 
+  const isTokyoGroup = currentAreaId === "tokyo" || tokyoWards.some((w: any) => w.id === currentAreaId);
+
   // ダミーデータ群
   const mockAlerts: AlertItem[] = [
-    { id: "1", type: "もやっと注意エリア", severity: "warning", message: "江戸川区・足立区でもやっと空気の傾向", time: "10:00" },
-    { id: "2", type: "一部データ欠損", severity: "warning", message: "港区の光化学Oxが一部欠損しています", time: "10:00" },
-    { id: "3", type: "投稿候補生成", severity: "info", message: "「今日の東京23区」を投稿できます", time: "10:00" },
+    { id: "1", type: "大阪エリア", severity: "warning", message: "夕方以降もやっと傾向", time: "10:00" },
+    { id: "2", type: "名古屋エリア", severity: "danger", message: "PM2.5がやや高めの推移", time: "10:00" },
+    { id: "3", type: "東京23区", severity: "info", message: "一部区でひかえめ空気を観測 (Demo)", time: "10:00" },
   ];
 
   const mockKpi = { freshnessMin: 10, successRate: 96, missingRate: 4, cautionAreasCount: 5, snapshotReadyCount: 3 };
@@ -81,7 +84,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             <LocationSelector currentArea={currentAreaId} />
           </Suspense>
           <Suspense fallback={<div className="h-10 w-32 bg-slate-200 animate-pulse rounded-lg"></div>}>
-            <SnapshotDialog measurement={primaryCity} forecasts={forecasts} />
+            {/* SNS用画像を作成ボタンは一旦非表示 */}
+            {/* <SnapshotDialog measurement={primaryCity} forecasts={forecasts} /> */}
           </Suspense>
         </div>
 
@@ -110,9 +114,19 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
 
           {/* 右側カラム (7/12): 東京23区マップ */}
           <div className="xl:col-span-7 flex flex-col relative min-w-0">
-            <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
-              <TokyoWardsMap measurements={tokyoWards} />
-            </Suspense>
+            {isTokyoGroup ? (
+              <Suspense fallback={<div className="flex-1 flex items-center justify-center bg-slate-50 rounded-xl min-h-[400px]">Loading Map...</div>}>
+                <TokyoWardsMap measurements={tokyoWards} />
+              </Suspense>
+            ) : (
+              <div className="flex-1 bg-white/40 rounded-xl border border-white/60 shadow-sm flex flex-col items-center justify-center p-8 text-center min-h-[360px]">
+                <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-3xl">🗺️</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-800">{primaryCity.name}エリア詳細マップは<br/>Phase 2で対応予定</h3>
+                <p className="text-sm text-slate-500 mt-2">現在は東京23区の詳細マップを優先的に提供しています。</p>
+              </div>
+            )}
             <div className="xl:hidden mt-4 shrink-0">
               <AirTypeGuidePanel />
             </div>

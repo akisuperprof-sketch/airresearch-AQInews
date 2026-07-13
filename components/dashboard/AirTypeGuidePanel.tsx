@@ -17,9 +17,16 @@ export function AirTypeGuidePanel() {
         </svg>
         空気タイプガイド
       </h2>
-      <p className="text-slate-600 text-sm mb-4 leading-relaxed">
-        独自のアルゴリズムで算出した「空気タイプ」の分類基準です。
-      </p>
+
+      <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+        <h3 className="font-bold text-slate-800 text-sm mb-1">AQI（空気質指数）とは？</h3>
+        <p className="text-xs text-slate-600 leading-relaxed mb-2">
+          AQI (Air Quality Index) は、PM2.5やオゾンなどの汚染物質から算出される国際的な空気の汚れの指標で、<strong>数値が小さいほど空気がきれい</strong>であることを示します。
+        </p>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          ※本ダッシュボードの「空気タイプ」は、AQIなどの観測データを元に<strong>100点満点の独自スコア（高いほど良好）</strong>に変換し、より直感的に分かりやすく分類したものです。
+        </p>
+      </div>
 
       <div className="overflow-x-auto mb-4">
         <table className="w-full text-left border-collapse text-sm">

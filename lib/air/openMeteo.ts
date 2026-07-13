@@ -34,11 +34,10 @@ export async function fetchAirQualityForecast(lat: number, lng: number): Promise
 
 // Convert EAQI to our standard air types
 export function getAirTypeFromEAQI(eaqi: number): string {
-  if (eaqi == null) return "不明";
-  if (eaqi <= 20) return "すっきり";
-  if (eaqi <= 40) return "おだやか";
-  if (eaqi <= 60) return "ひかえめ";
-  if (eaqi <= 80) return "もやっと";
-  if (eaqi <= 100) return "どんより";
-  return "きけん";
+  if (eaqi == null) return "確認中";
+  if (eaqi <= 20) return "すっきり空気";
+  if (eaqi <= 40) return "おだやか空気";
+  if (eaqi <= 60) return "もやっと空気";
+  if (eaqi <= 80) return "ひかえめ空気";
+  return "こもり空気";
 }
